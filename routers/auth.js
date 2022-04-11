@@ -3,6 +3,7 @@ const pool = require("../pool");
 
 router.post("/login", (req, res) => {
   const data = { ...req.body };
+  console.log(`select * from users where username = '${data.username}' and password = '${data.password}' limit 1`)
   pool.query(
     `select * from users where username = '${data.username}' and password = '${data.password}' limit 1`,
     (error, results) => {

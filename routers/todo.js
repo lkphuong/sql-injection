@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const pool = require("../pool");
 
-router.post("/", (req, res) => {
+router.post("/createTodo", (req, res) => {
   const data = { ...req.body };
+  console.log(`insert into todos (user_id, title) values ('${data.user_id}','${data.title}')`);
   pool.query(
-    `insert into todos (title, user_id) values ('${data.title}', '${data.user_id}')`,
+    `insert into todos (user_id, title) values ('${data.user_id}','${data.title}')`,
     (error, result) => {
       if (error) {
         console.log(error);
@@ -37,7 +38,7 @@ router.get("/getTodoById/:id", (req, res) => {
   );
 });
 
-router.get("/getMyTodos", (req, res) => {
+router.post("/getMyTodos", (req, res) => {
   const data = req.body;
   pool.query(
     `select * from todos where user_id = ${data.user_id}`,
@@ -51,7 +52,7 @@ router.get("/getMyTodos", (req, res) => {
           .status(200)
           .send({ message: "Thành công", data: result.rows });
       }
-      res.status(404).send({ message: "Không tìm thấy" });
+      res.status(200).send({ message: "Thành công", data: [] });
     }
   );
 });
@@ -72,11 +73,12 @@ router.put("/updateTodoById/:id", (req, res) => {
   );
 });
 
-router.delete("/deleteTodoById/:id", (req, res) => {
+router.delete("/deleteTodoById", (req, res) => {
     const data = {...req.params, ...req.body}
     pool.query(`delete from todos where id = ${data.id} and user_id = ${data.user_id}`,
     (error, result) => {
         if(error) {
+          console.log(error)
             return res.status(400).send({message: "Thất bại"})
         }
         if(result.rowCount > 0) {
