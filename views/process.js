@@ -132,7 +132,9 @@ $(function () {
 
   $(".add-btn").on("click", function () {
     var itemVal = $(".form-control").val();
-    fetch("/todo/createTodo", {
+    
+    if(itemVal!=="") {
+      fetch("/todo/createTodo", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -150,6 +152,7 @@ $(function () {
       .catch((error) => {
         console.error("Error:", error);
       });
+    }
     formControl.focus();
   });
 
