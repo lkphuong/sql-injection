@@ -38,7 +38,6 @@ $(document).ready(function () {
         .then((response) => response.json())
         .then((data) => {
           if (data.message == "Đăng nhập thành công") {
-            console.data;
             localStorage.setItem("user_id", data.data.id);
             window.location = "/todo";
           } else {
@@ -60,7 +59,7 @@ $(document).ready(function () {
       alert("Yêu cầu nhập đầy đủ thông tin");
     } else {
       fetch("/auth/register", {
-        method: "POST", // or 'PUT'
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
