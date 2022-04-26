@@ -5,7 +5,7 @@ router.post("/createTodo", (req, res) => {
   const data = { ...req.body };
   console.log(`insert into todos (user_id, title) values ('${data.user_id}','${data.title}')`);
   pool.query(
-    `insert into todos (user_id, title) values ('${data.user_id}','${data.title}')`,
+    'insert into todos (user_id, title) values ($1, $2)', [data.user_id, data.title],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -22,7 +22,7 @@ router.get("/getTodoById/:id", (req, res) => {
     `select * from todos where id = '${data.id}' and user_id = '${data.user_id}'`
   );
   pool.query(
-    `select * from todos where id = ${data.id} and user_id = ${data.user_id}`,
+    'select * from todos where id = $1 and user_id = $2',[data.id, data.user_id],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -40,8 +40,9 @@ router.get("/getTodoById/:id", (req, res) => {
 
 router.post("/getMyTodos", (req, res) => {
   const data = req.body;
+  console.log(`select * from todos where user_id = ${data.user_id}`)
   pool.query(
-    `select * from todos where user_id = ${data.user_id}`,
+    'select * from todos where user_id = $1', [data.user_id],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -59,8 +60,9 @@ router.post("/getMyTodos", (req, res) => {
 
 router.put("/updateTodoById/:id", (req, res) => {
   const data = { ...req.body, ...req.params };
+  console.log(`update todos set title = '${data.title}', user_id = '${data.user_id}' where id = ${data.id}`)
   pool.query(
-    `update todos set title = '${data.title}', user_id = '${data.user_id}' where id = ${data.id}`,
+    'update todos set title = $1, user_id = $2 where id = $3', [data.title, data.user_id, data.id],
     (error, result) => {
       if (error) {
         return res.status(400).send("Thất bại");
@@ -75,7 +77,8 @@ router.put("/updateTodoById/:id", (req, res) => {
 
 router.delete("/deleteTodoById", (req, res) => {
     const data = {...req.params, ...req.body}
-    pool.query(`delete from todos where id = ${data.id} and user_id = ${data.user_id}`,
+    console.log(`delete from todos where id = ${data.id} and user_id = ${data.user_id}`)
+    pool.query('delete from todos where id = $1 and user_id = $2', [data.id, data.user_id],
     (error, result) => {
         if(error) {
           console.log(error)

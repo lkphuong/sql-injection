@@ -5,7 +5,7 @@ router.post("/login", (req, res) => {
   const data = { ...req.body };
   console.log(`select * from users where username = '${data.username}' and password = '${data.password}' limit 1`)
   pool.query(
-    `select * from users where username = '${data.username}' and password = '${data.password}' limit 1`,
+    'select * from users where username = $1 and password = $2 limit 1',[data.username, data.password],
     (error, results) => {
       if (error) {
         throw error;
@@ -26,8 +26,9 @@ router.post("/login", (req, res) => {
 
 router.post("/register", (req, res) => {
   const data = { ...req.body };
+  console.log( `insert into users (username, password) values ('${data.username}', '${data.password}')`)
   pool.query(
-    `insert into users (username, password) values ('${data.username}', '${data.password}')`,
+    'insert into users (username, password) values ($1, $2)',[data.username, data.password],
     (error, results) => {
       if(error) {
         res.status(400).send({message: error})
@@ -39,8 +40,9 @@ router.post("/register", (req, res) => {
 
 router.get("/profile", (req, res) => {
   const data = { ...req.query };
+  console.log(`select * from users where username = '${data.username}' and id = '${data.id}' limit 1`,)
   pool.query(
-    `select * from users where username = '${data.username}' and id = '${data.id}' limit 1`,
+    'select * from users where username = $1 and id = $2 limit 1',[data.username, data.password],
     (error, results) => {
       if (error) {
         throw error;
