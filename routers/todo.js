@@ -40,6 +40,7 @@ router.get("/getTodoById/:id", (req, res) => {
 
 router.post("/getMyTodos", (req, res) => {
   const data = req.body;
+  console.log( `select * from todos where user_id = ${data.user_id}`)
   pool.query(
     `select * from todos where user_id = ${data.user_id}`,
     (error, result) => {
@@ -59,6 +60,7 @@ router.post("/getMyTodos", (req, res) => {
 
 router.put("/updateTodoById/:id", (req, res) => {
   const data = { ...req.body, ...req.params };
+  console.log( `update todos set title = '${data.title}', user_id = '${data.user_id}' where id = ${data.id}`)
   pool.query(
     `update todos set title = '${data.title}', user_id = '${data.user_id}' where id = ${data.id}`,
     (error, result) => {
@@ -75,6 +77,7 @@ router.put("/updateTodoById/:id", (req, res) => {
 
 router.delete("/deleteTodoById", (req, res) => {
     const data = {...req.params, ...req.body}
+    console.log(`delete from todos where id = ${data.id} and user_id = ${data.user_id}`)
     pool.query(`delete from todos where id = ${data.id} and user_id = ${data.user_id}`,
     (error, result) => {
         if(error) {

@@ -8,7 +8,7 @@ router.post("/login", (req, res) => {
     `select * from users where username = '${data.username}' and password = '${data.password}' limit 1`,
     (error, results) => {
       if (error) {
-        throw error;
+        return res.status(400).send({message: "Sai tài khoản hoặc mật khẩu"})
       }
       // res.status(200).json(results);
       if (results.rowCount > 0) {
@@ -26,6 +26,7 @@ router.post("/login", (req, res) => {
 
 router.post("/register", (req, res) => {
   const data = { ...req.body };
+  console.log(`insert into users (username, password) values ('${data.username}', '${data.password}')`)
   pool.query(
     `insert into users (username, password) values ('${data.username}', '${data.password}')`,
     (error, results) => {
@@ -39,11 +40,12 @@ router.post("/register", (req, res) => {
 
 router.get("/profile", (req, res) => {
   const data = { ...req.query };
+  console.log(`select * from users where username = '${data.username}' and id = '${data.id}' limit 1`)
   pool.query(
     `select * from users where username = '${data.username}' and id = '${data.id}' limit 1`,
     (error, results) => {
       if (error) {
-        throw error;
+        res.status(400).send({message: error})
       }
       // res.status(200).json(results);
       if (results.rowCount > 0) {
