@@ -1,0 +1,6 @@
+todos	id	integer
+todos	user_id	integer
+todos	title	character varying
+users	id	integer
+users	username	character varying
+users	password	character varying
